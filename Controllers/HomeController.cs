@@ -47,13 +47,13 @@ namespace RestaurantOrderApp.Controllers
         }
 
         [HttpGet]
-        public JsonResult getDishUnitPrice(int itemId)
+        public decimal getDishUnitPrice(int itemId)
         {
             DishRepository objDishRepository = new DishRepository();
             List<Dish> dishes = objDishRepository.GetAllDish();
-            decimal UnitPrice = dishes[itemId].DishPrice;
+            decimal UnitPrice = dishes[itemId-1].DishPrice;
 
-            return Json(UnitPrice, System.Web.Mvc.JsonRequestBehavior.AllowGet);
+            return UnitPrice;
         }
 
     }
