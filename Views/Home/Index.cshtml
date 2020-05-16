@@ -1,0 +1,123 @@
+﻿@model RestaurantOrderApp.Models.Model
+@using RestaurantOrderApp.Enums;
+@{
+    ViewData["Title"] = "Home Page";
+}
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DishName").change(function () {
+            var itemId = $("#DishName").val();
+            GetDishUnitPrice(itemId);
+        })
+
+    });
+
+    function GetDishUnitPrice(itemId) {
+        $ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'JSON',
+            contentType: 'application/jon; charset=utf-8',
+            url: '/home/getDishUnitPrice',
+            data: { itemId: itemId },
+
+            success: function (data) {
+                $("#txtUnitPrice").val(parseFloat(data).toFixed(2));
+            },
+            error: function () {
+                alert("Coś poszło nie tak z pobraniem ceny");
+            }
+        });
+
+    }
+</script>
+
+
+<fieldset>
+    <legend>
+        Restaurant
+    </legend>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    Stolik:
+                    <select asp-for="TableName" asp-items="Html.GetEnumSelectList(typeof (TablesNames))" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+
+<fieldset>
+    <legend>
+        Dishes
+    </legend>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    Danie:
+                    <select asp-for="DishName" asp-items="Html.GetEnumSelectList(typeof (DishesNames))" class="form-control"></select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    Cena jednostkowa:
+                    <input type="text" readonly="readonly" id="textUnitPrice" value="0,00" name="UnitPrice" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    Ilość:
+                    <input type="text" id="textQuantity" value="0,00" name="Quantity" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    Suma:
+                    <input type="text" readonly="readonly" id="textTotal" value="0,00" name="Total" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="button" style="margin-top: 25px" id="btnAddToList" value="Dodaj danie do zamówienia" name="AddToList" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>
+        Lista zamówień:
+    </legend>
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th hidden>
+                    Id
+                </th>
+                <th>
+                    Nazwa dania
+                </th>
+                <th>
+                    Cena dania
+                </th>
+                <th>
+                    Ilość
+                </th>
+                <th>
+                    Suma
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+    </table>
+</fieldset>
