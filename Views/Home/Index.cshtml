@@ -20,8 +20,16 @@
             AddToTheItemList();
         });
 
+        $("#btnSaveOrder").click(function () {
+            CalculateTotalPayment();
+        });
+        
+
     });
 
+    function RemoveItem(itemId) {
+        $(itemId).closest('tr').remove();
+    }
     function AddToTheItemList() {
         var tblOrderList = $("#tblOrderList");
         var UnitPrice = $("#textUnitPrice").val();
@@ -33,7 +41,19 @@
         var OrderList = "<tr><td hidden>" + DishId + "</td><td>" + DishName + "</td><td>" + UnitPrice + "</td><td>" + Quantity +
             "</td><td>" + Total + "</td><td>"
             + "<input type='button' value='Usuń' name='remove' class='btn btn-danger' onclick='RemoveItem(this)' /></tr></tr >";
+
         tblOrderList.append(OrderList);
+        FinalOrderTotal();
+    }
+
+    function FinalOrderTotal() {
+        $("#txtFinalTotal").val("0,00");
+        var FinalTotal = 0.00;
+        $("#tblOrderList").find("tr:gt(0)").each(function () {
+            var Total = parseFloat($(this).find("td:eq(4)").text());
+            FinalTotal += Total;
+        });
+        $("#txtFinalTotal").val(parseFloat(FinalTotal).toFixed(2));
     }
 
     function CalculateSubTotal() {
@@ -41,6 +61,13 @@
         var Quantity = $("#textQuantity").val();
         var Total = UnitPrice * Quantity;
         $("#textTotal").val(parseFloat(Total).toFixed(2));
+    }
+
+    function CalculateTotalPayment() {
+        var Payment = $("#txtPayment").val();
+        var Tip = $("#txtTip"). val();
+        var Total = Payment * (Tip/100+100);
+        $("#txtTotalPayment").val(parseFloat(Total).toFixed(2));
     }
 
     function GetDishUnitPrice(itemId) {
@@ -76,6 +103,12 @@
                     <select asp-for="TableName" asp-items="Html.GetEnumSelectList(typeof (TablesNames))" class="form-control"></select>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    Suma zamówienia:
+                    <input type="text" value="0,00" name="FinalTotal" readonly="readonly" id="txtFinalTotal" class="form-control" />
+                </div>
+            </div>
         </div>
     </div>
 </fieldset>
@@ -104,7 +137,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     Ilość:
-                    <input type="text" id="textQuantity" value="1" name="Quantity" class="form-control" />
+                    <input type="number" id="textQuantity" value="1" name="Quantity" class="form-control" min="1" step="1"/>
                 </div>
             </div>
             <div class="col-md-6">
@@ -151,3 +184,45 @@
         </thead>
     </table>
 </fieldset>
+
+<div style="margin-top: 50px">
+    <input data-toggle="modal" data-target="#divPayment" type="button" name="Save" value="Zapisz zamówienie" style="float:right" id="btnSaveOrder" class="btn btn-primary"  />
+</div>
+
+<div id="divPayment" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Płatność</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            Suma zamówienia:
+                            <input style="text-align:right" type="text" name="modalPayment" value="0,00" id="txtPayment" readonly="readonly" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            Napiwek [%]:
+                            <input style="text-align:right" type="text" name="Tip" value="15" id="txtTip" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            Do zapłaty:
+                            <input type="text" name="modalPaymentTotal" value="0,00" id="txtPaymentTotal" readonly="readonly" class="form-control" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" id="btnPayment" value="Zapłać">Zapłać</button>
+                <button class="btn btn-danger" id="btnClose" data-dismiss="modal" value="Zamknij">Zamknij</button>
+
+            </div>
+        </div>
+    </div>
+</div>
