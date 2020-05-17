@@ -10,7 +10,14 @@
         $("#DishName").change(function () {
             var itemId = $("#DishName").val();
             GetDishUnitPrice(itemId);
-        })
+
+            var button = $("#btnAddToList");
+            if (this.value == "0") {
+                button.attr("disabled",true)
+            } else {
+                button.attr("disabled", false)
+            }
+        });
 
         $("input[type=text]").change(function () {
             CalculateSubTotal();
@@ -32,16 +39,16 @@
     function FinalPayment() {
         var objOrderViewModel = {};
         var ListOfOrderDetailViewModel = new Array();
-        objOrderViewModel.TableId = $("#Table").val();
+        objOrderViewModel.TableId = $("#TableName").val();
         objOrderViewModel.FinalTotal = $("#txtFinalTotal").val();
 
         $("#tblOrderList").find("tr:gt(0)").each(function () {
-            var OrderOrderDetailViewModel = {};
-            OrderOrderDetailViewModel.OrderId = parseFloat($(this).find("td:eq(4)").text());
-            OrderOrderDetailViewModel.UnitPrice = parseFloat($(this).find("td:eq(4)").text());
-            OrderOrderDetailViewModel.Quantity = parseFloat($(this).find("td:eq(4)").text());
-            OrderOrderDetailViewModel.Total = parseFloat($(this).find("td:eq(4)").text());
-            ListOfOrderDetailViewModel.push(OrderOrderDetailViewModel);
+            var OrderDetailViewModel = {};
+            OrderDetailViewModel.OrderId = parseFloat($(this).find("td:eq(0)").text());
+            OrderDetailViewModel.UnitPrice = parseFloat($(this).find("td:eq(2)").text());
+            OrderDetailViewModel.Quantity = parseFloat($(this).find("td:eq(3)").text());
+            OrderDetailViewModel.Total = parseFloat($(this).find("td:eq(4)").text());
+            ListOfOrderDetailViewModel.push(OrderDetailViewModel);
         });
         objOrderViewModel.ListOfOrderDetailViewModel = ListOfOrderDetailViewModel;
 
@@ -54,7 +61,7 @@
             data: JSON.stringify(objOrderViewModel),
 
             success: function (data) {
-                $("#textUnitPrice").val(parseFloat(data).toFixed(2));
+                alert(data);
             },
             error: function () {
                 alert("Coś poszło nie tak z dodaniem zamówienia");
@@ -131,7 +138,7 @@
 
 <fieldset>
     <legend>
-        Restaurant
+        Resturacja
     </legend>
     <div class="conteiner">
         <div class="row">
@@ -161,7 +168,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     Danie:
-                    <select asp-for="DishName" asp-items="Html.GetEnumSelectList(typeof (DishesNames))" class="form-control"></select>
+                    <select asp-for="DishName" asp-items="Html.GetEnumSelectList(typeof (DishesNames))" class="form-control required"></select>
                 </div>
             </div>
             <div class="col-md-6">
@@ -186,7 +193,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <input type="button" style="margin-top: 25px" id="btnAddToList" value="Dodaj danie do zamówienia" name="AddToList" class="btn btn-success" />
+                    <input type="button" disabled="disabled" style="margin-top: 25px" id="btnAddToList" value="Dodaj danie do zamówienia" name="AddToList" class="btn btn-success" />
                 </div>
             </div>
         </div>
@@ -216,7 +223,7 @@
                     Suma
                 </th>
                 <th>
-                    Action
+                    
                 </th>
             </tr>
         </thead>

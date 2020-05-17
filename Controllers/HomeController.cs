@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http.Results;
-using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RestaurantOrderApp.Models;
 using RestaurantOrderApp.Repositories;
 using RestaurantOrderApp.ViewModel;
-using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
-using Controller = Microsoft.AspNetCore.Mvc.Controller;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
-using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
+
 
 namespace RestaurantOrderApp.Controllers
 {
@@ -64,7 +55,9 @@ namespace RestaurantOrderApp.Controllers
         [HttpPost]
         public JsonResult Index(OrderViewModel objOrderViewModel)
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            //OrderRepository objOrderRepository = new OrderRepository();
+            //objOrderRepository.AddOrder(objOrderViewModel);
+            return Json("Order added", new JsonSerializerSettings());
         }
     }
 }

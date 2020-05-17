@@ -7,7 +7,6 @@ namespace RestaurantOrderApp.ViewModel
 {
     public class OrderDetailViewModel
     {
-        public int OrderDetailsId { get; set; }
         public int OrderId { get; set; }
         public int DishId { get; set; }
         public decimal UnitPrice { get; set; }
