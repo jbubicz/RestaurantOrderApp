@@ -9,7 +9,6 @@ namespace RestaurantOrderApp.Models
     {
         public int OrderId { get; set; }
         public int TableId { get; set; }
-        public string OrderName { get; set; }
         public decimal FinalTotal { get; set; }
     }
 }

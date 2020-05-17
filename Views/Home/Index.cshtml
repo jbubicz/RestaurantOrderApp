@@ -23,9 +23,46 @@
         $("#btnSaveOrder").click(function () {
             CalculateTotalPayment();
         });
-        
 
+        $("#btnPayment").click(function () {
+            FinalPayment();
+        });
     });
+
+    function FinalPayment() {
+        var objOrderViewModel = {};
+        var ListOfOrderDetailViewModel = new Array();
+        objOrderViewModel.TableId = $("#Table").val();
+        objOrderViewModel.FinalTotal = $("#txtFinalTotal").val();
+
+        $("#tblOrderList").find("tr:gt(0)").each(function () {
+            var OrderOrderDetailViewModel = {};
+            OrderOrderDetailViewModel.OrderId = parseFloat($(this).find("td:eq(4)").text());
+            OrderOrderDetailViewModel.UnitPrice = parseFloat($(this).find("td:eq(4)").text());
+            OrderOrderDetailViewModel.Quantity = parseFloat($(this).find("td:eq(4)").text());
+            OrderOrderDetailViewModel.Total = parseFloat($(this).find("td:eq(4)").text());
+            ListOfOrderDetailViewModel.push(OrderOrderDetailViewModel);
+        });
+        objOrderViewModel.ListOfOrderDetailViewModel = ListOfOrderDetailViewModel;
+
+        $.ajax({
+            async: true,
+            type: 'POST',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            url: '/home/Index',
+            data: JSON.stringify(objOrderViewModel),
+
+            success: function (data) {
+                $("#textUnitPrice").val(parseFloat(data).toFixed(2));
+            },
+            error: function () {
+                alert("Coś poszło nie tak z dodaniem zamówienia");
+            }
+        });
+
+
+    }
 
     function RemoveItem(itemId) {
         $(itemId).closest('tr').remove();
@@ -54,6 +91,7 @@
             FinalTotal += Total;
         });
         $("#txtFinalTotal").val(parseFloat(FinalTotal).toFixed(2));
+        $("#txtPayment").val(parseFloat(FinalTotal).toFixed(2));
     }
 
     function CalculateSubTotal() {
@@ -65,9 +103,9 @@
 
     function CalculateTotalPayment() {
         var Payment = $("#txtPayment").val();
-        var Tip = $("#txtTip"). val();
-        var Total = Payment * (Tip/100+100);
-        $("#txtTotalPayment").val(parseFloat(Total).toFixed(2));
+        var Tip = $("#txtTip").val();
+        var Total = Payment * (Tip / 100 + 1);
+        $("#txtPaymentTotal").val(parseFloat(Total).toFixed(2));
     }
 
     function GetDishUnitPrice(itemId) {
@@ -137,7 +175,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     Ilość:
-                    <input type="number" id="textQuantity" value="1" name="Quantity" class="form-control" min="1" step="1"/>
+                    <input type="number" id="textQuantity" value="1" name="Quantity" class="form-control" min="1" step="1" />
                 </div>
             </div>
             <div class="col-md-6">
@@ -186,7 +224,7 @@
 </fieldset>
 
 <div style="margin-top: 50px">
-    <input data-toggle="modal" data-target="#divPayment" type="button" name="Save" value="Zapisz zamówienie" style="float:right" id="btnSaveOrder" class="btn btn-primary"  />
+    <input data-toggle="modal" data-target="#divPayment" type="button" name="Save" value="Zapisz zamówienie" style="float:right" id="btnSaveOrder" class="btn btn-primary" />
 </div>
 
 <div id="divPayment" class="modal fade" role="dialog">
@@ -211,7 +249,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             Do zapłaty:
-                            <input type="text" name="modalPaymentTotal" value="0,00" id="txtPaymentTotal" readonly="readonly" class="form-control" />
+                            <input style="text-align:right" type="text" name="modalPaymentTotal" value="0,00" id="txtPaymentTotal" readonly="readonly" class="form-control" />
                         </div>
 
                     </div>
