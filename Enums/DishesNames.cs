@@ -8,21 +8,21 @@ namespace RestaurantOrderApp.Enums
 {
     public enum DishesNames
     {
-        [Display(Name = "Zupa ogórkowa")]
+        [Display(Name = "Domowy żurek staropolski")]
         Dish1 = 1,
-        [Display(Name = "Zupa pomidorowa")]
+        [Display(Name = "Rosół")]
         Dish2 = 2,
-        [Display(Name = "Zupa pieczarkowa")]
+        [Display(Name = "Zapiekanka makaronowa ( Pasticcio )")]
         Dish3 = 3,
-        [Display(Name = "Kotlet schabowy z ziemniakami i bukietem surówek")]
+        [Display(Name = "Kotlet schabowy z ziemniakami i surówką")]
         Dish4 = 4,
-        [Display(Name = "Kotlet z piersi kurczaka z ziemniakami i bukietem surówek")]
+        [Display(Name = "Pierogi ruskie z ziemniakami i serem")]
         Dish5 = 5,
-        [Display(Name = "Gołąbki z sosem pomidorowym")]
+        [Display(Name = "Kulbin chorwacki z emulsją maślaną")]
         Dish6 = 6,
-        [Display(Name = "Szarlotka na ciepło z bitą śmietaną i lodami")]
+        [Display(Name = "Kawa mrożona z lodami")]
         Dish7 = 7,
-        [Display(Name = "Puchar lodowy")]
+        [Display(Name = "Sernik z białą czekoladą. pomarańczą i wiśniowymi lodami")]
         Dish8 = 8
 
     }
